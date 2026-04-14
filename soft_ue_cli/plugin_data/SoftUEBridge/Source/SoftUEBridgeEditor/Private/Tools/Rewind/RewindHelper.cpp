@@ -127,13 +127,13 @@ bool FRewindHelper::HasData()
 	IRewindDebugger* Debugger = GetRewindDebugger();
 	if (Debugger)
 	{
-		// Check if debugger has objects or is recording/loaded
-		TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebuggedObjects();
+		// Check if debugger has objects or is recording
+		TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebugComponents();
 		if (Objects.Num() > 0)
 		{
 			return true;
 		}
-		if (Debugger->IsRecording() || Debugger->IsTraceFileLoaded())
+		if (Debugger->IsRecording())
 		{
 			return true;
 		}
@@ -154,20 +154,7 @@ FString FRewindHelper::StartRecording(
 		return TEXT("Already recording. Stop current recording first.");
 	}
 
-	// Try using the IRewindDebugger's own recording API first
-	if (Debugger && Debugger->CanStartRecording())
-	{
-		Debugger->StartRecording();
-		bRecordingActive = true;
-		bLoadedFromFile = false;
-		ActiveChannels = Channels;
-		ActiveActorFilters = ActorTags;
-		ActiveTraceFile = FilePath;
-		RecordingStartTime = FPlatformTime::Seconds();
-		return FString();
-	}
-
-	// Fallback: start via console command
+	// Start via console command (this engine version lacks IRewindDebugger recording API)
 	TArray<FString> ResolvedChannels;
 	if (Channels.Num() == 0)
 	{
@@ -303,7 +290,7 @@ TSharedPtr<FDebugObjectInfo> FRewindHelper::FindObjectByTag(
 		return nullptr;
 	}
 
-	TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebuggedObjects();
+	TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebugComponents();
 	for (const TSharedPtr<FDebugObjectInfo>& Info : Objects)
 	{
 		if (Info.IsValid() && GetActorTagFromDebugObject(*Info) == ActorTag)
@@ -348,7 +335,7 @@ TSharedPtr<FJsonObject> FRewindHelper::CollectTrackList(const FString& ActorTag)
 
 	// Enumerate debugged objects
 	TArray<TSharedPtr<FJsonValue>> ActorsArr;
-	TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebuggedObjects();
+	TArray<TSharedPtr<FDebugObjectInfo>>& Objects = Debugger->GetDebugComponents();
 
 	for (const TSharedPtr<FDebugObjectInfo>& Info : Objects)
 	{

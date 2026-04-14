@@ -9,7 +9,7 @@
 #include "Engine/DataAsset.h"
 #include "Engine/UserDefinedEnum.h"
 #include "LandscapeGrassType.h"
-#include "StructUtils/UserDefinedStruct.h"
+#include "Engine/UserDefinedStruct.h"
 #include "UObject/UnrealType.h"
 #include "UObject/EnumProperty.h"
 #include "Tools/BridgeToolResult.h"

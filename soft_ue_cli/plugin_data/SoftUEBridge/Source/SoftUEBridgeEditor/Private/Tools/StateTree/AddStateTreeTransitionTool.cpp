@@ -158,7 +158,7 @@ FBridgeToolResult UAddStateTreeTransitionTool::Execute(
 	EStateTreeTransitionPriority Priority = EStateTreeTransitionPriority::Normal;
 	if (PriorityStr.Equals(TEXT("Low"), ESearchCase::IgnoreCase))
 	{
-		Priority = EStateTreeTransitionPriority::Low;
+		Priority = EStateTreeTransitionPriority::Medium;
 	}
 	else if (PriorityStr.Equals(TEXT("High"), ESearchCase::IgnoreCase))
 	{
@@ -194,7 +194,7 @@ FBridgeToolResult UAddStateTreeTransitionTool::Execute(
 	}
 	else if (TargetStateName.Equals(TEXT("Next"), ESearchCase::IgnoreCase))
 	{
-		NewTransition.State = FStateTreeStateLink(EStateTreeTransitionType::NextSelectableState);
+		NewTransition.State = FStateTreeStateLink(EStateTreeTransitionType::NextState);
 	}
 	else
 	{

@@ -27,6 +27,10 @@
 			"Name": "PythonScriptPlugin",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
 		}
 	],
 	"Modules": [

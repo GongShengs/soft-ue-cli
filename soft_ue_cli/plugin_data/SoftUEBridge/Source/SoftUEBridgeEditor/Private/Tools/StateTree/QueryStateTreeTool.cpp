@@ -9,7 +9,6 @@
 #include "StateTreeConditionBase.h"
 #include "StateTreePropertyBindings.h"
 #include "StateTreeTypes.h"
-#include "StructUtils/InstancedStructContainer.h"
 
 FString UQueryStateTreeTool::GetToolDescription() const
 {
@@ -131,7 +130,6 @@ TSharedPtr<FJsonObject> UQueryStateTreeTool::ExtractStates(UStateTree* StateTree
 		if (bDetailed)
 		{
 			StateObj->SetStringField(TEXT("selection_behavior"), GetSelectionBehaviorString(static_cast<uint8>(State.SelectionBehavior)));
-			StateObj->SetNumberField(TEXT("depth"), State.Depth);
 
 			// Parent info
 			if (State.Parent.IsValid())
@@ -352,7 +350,6 @@ FString UQueryStateTreeTool::GetStateTypeString(uint8 StateType) const
 	case EStateTreeStateType::State: return TEXT("State");
 	case EStateTreeStateType::Group: return TEXT("Group");
 	case EStateTreeStateType::Linked: return TEXT("Linked");
-	case EStateTreeStateType::LinkedAsset: return TEXT("LinkedAsset");
 	case EStateTreeStateType::Subtree: return TEXT("Subtree");
 	default: return TEXT("Unknown");
 	}

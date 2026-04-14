@@ -5,7 +5,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "AssetRegistry/IAssetRegistry.h"
 #include "SoftUEBridgeEditorModule.h"
-#include "StructUtils/UserDefinedStruct.h"
+#include "Engine/UserDefinedStruct.h"
 #include "Tools/Asset/AssetIntrospectionUtils.h"
 
 FString UQueryStructTool::GetToolDescription() const

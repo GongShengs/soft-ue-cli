@@ -78,7 +78,9 @@ bool FBridgeServer::Start(int32 Port, const FString& BindAddress)
 	RouteHandle = HttpRouter->BindRoute(
 		FHttpPath(TEXT("/bridge")),
 		EHttpServerRequestVerbs::VERB_POST | EHttpServerRequestVerbs::VERB_GET | EHttpServerRequestVerbs::VERB_OPTIONS,
-		FHttpRequestHandler::CreateRaw(this, &FBridgeServer::HandleRequest)
+		FHttpRequestHandler([this](const FHttpServerRequest& Request, const FHttpResultCallback& OnComplete) -> bool {
+			return HandleRequest(Request, OnComplete);
+		})
 	);
 
 	if (!RouteHandle.IsValid())

@@ -6,7 +6,8 @@
 #include "Engine/UserDefinedEnum.h"
 #include "Internationalization/Text.h"
 #include "Kismet2/StructureEditorUtils.h"
-#include "StructUtils/UserDefinedStruct.h"
+#include "UserDefinedStructure/UserDefinedStructEditorData.h"
+#include "Engine/UserDefinedStruct.h"
 #include "UObject/EnumProperty.h"
 #include "UObject/UnrealType.h"
 
@@ -131,7 +132,7 @@ namespace
 		}
 
 		FString Exported;
-		Property->ExportText_Direct(Exported, ValuePtr, ValuePtr, UserStruct, PPF_None);
+		Property->ExportText_Direct(Exported, ValuePtr, ValuePtr, const_cast<UUserDefinedStruct*>(UserStruct), PPF_None);
 		return Exported;
 	}
 }
@@ -220,13 +221,6 @@ TSharedPtr<FJsonObject> AssetIntrospectionUtils::InspectUserDefinedStruct(UUserD
 			Member->SetBoolField(TEXT("is_array"), Variable.ContainerType == EPinContainerType::Array);
 			Member->SetBoolField(TEXT("is_set"), Variable.ContainerType == EPinContainerType::Set);
 			Member->SetBoolField(TEXT("is_map"), Variable.ContainerType == EPinContainerType::Map);
-
-			TSharedPtr<FJsonObject> Metadata = MakeShareable(new FJsonObject);
-			for (const TPair<FName, FString>& Pair : Variable.MetaData)
-			{
-				Metadata->SetStringField(Pair.Key.ToString(), Pair.Value);
-			}
-			Member->SetObjectField(TEXT("metadata"), Metadata);
 
 			Members.Add(MakeShareable(new FJsonValueObject(Member)));
 		}

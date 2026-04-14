@@ -75,6 +75,10 @@ public class SoftUEBridgeEditor : ModuleRules
 			"StateTreeModule",
 			"StateTreeEditorModule",
 
+			// StructUtils (required for FInstancedStructContainer, UUserDefinedStruct)
+			"StructUtils",
+			"StructUtilsEngine",
+
 			// Python Scripting
 			"PythonScriptPlugin",
 

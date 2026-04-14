@@ -8,3 +8,12 @@ dist/
 .coverage
 *.so
 *.dylib
+
+# UE plugin build artifacts
+Binaries/
+Intermediate/
+DerivedDataCache/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
