@@ -15,6 +15,7 @@
 #include "Tools/Asset/GetAssetDiffTool.h"
 #include "Tools/Asset/GetAssetPreviewTool.h"
 #include "Tools/Asset/OpenAssetTool.h"
+#include "Tools/Asset/InspectDetailsPanelTool.h"
 
 // Blueprint
 #include "Tools/Blueprint/QueryBlueprintTool.h"
@@ -55,6 +56,7 @@
 
 // References
 #include "Tools/References/FindReferencesTool.h"
+#include "Tools/References/FindDependenciesTool.h"
 
 // Scripting
 #include "Tools/Scripting/RunPythonScriptTool.h"
@@ -111,6 +113,7 @@ void FSoftUEBridgeEditorModule::StartupModule()
 	Registry.RegisterToolClass<UGetAssetDiffTool>();
 	Registry.RegisterToolClass<UGetAssetPreviewTool>();
 	Registry.RegisterToolClass<UOpenAssetTool>();
+	Registry.RegisterToolClass<UInspectDetailsPanelTool>();
 
 	// Blueprint
 	Registry.RegisterToolClass<UQueryBlueprintTool>();
@@ -151,6 +154,7 @@ void FSoftUEBridgeEditorModule::StartupModule()
 
 	// References
 	Registry.RegisterToolClass<UFindReferencesTool>();
+	Registry.RegisterToolClass<UFindDependenciesTool>();
 
 	// Scripting
 	Registry.RegisterToolClass<URunPythonScriptTool>();

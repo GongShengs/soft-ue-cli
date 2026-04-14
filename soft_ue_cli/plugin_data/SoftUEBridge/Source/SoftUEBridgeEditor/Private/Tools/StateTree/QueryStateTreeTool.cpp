@@ -177,10 +177,15 @@ TSharedPtr<FJsonObject> UQueryStateTreeTool::ExtractTransitions(UStateTree* Stat
 
 	for (const FCompactStateTreeState& State : States)
 	{
-		// Get transitions for this state starting from TransitionsBegin
-		FStateTreeIndex16 TransIdx = FStateTreeIndex16(State.TransitionsBegin);
-		while (const FCompactStateTransition* Transition = StateTree->GetTransitionFromIndex(TransIdx))
+		for (uint8 t = 0; t < State.TransitionsNum; ++t)
 		{
+			FStateTreeIndex16 TransIdx = FStateTreeIndex16(static_cast<uint16>(State.TransitionsBegin + t));
+			const FCompactStateTransition* Transition = StateTree->GetTransitionFromIndex(TransIdx);
+			if (!Transition)
+			{
+				break;
+			}
+
 			TSharedPtr<FJsonObject> TransObj = MakeShareable(new FJsonObject);
 			TransObj->SetNumberField(TEXT("index"), TransitionIndex++);
 			TransObj->SetStringField(TEXT("state_name"), State.Name.ToString());
@@ -191,13 +196,14 @@ TSharedPtr<FJsonObject> UQueryStateTreeTool::ExtractTransitions(UStateTree* Stat
 			{
 			case EStateTreeTransitionTrigger::OnStateCompleted: TriggerStr = TEXT("OnStateCompleted"); break;
 			case EStateTreeTransitionTrigger::OnStateFailed: TriggerStr = TEXT("OnStateFailed"); break;
+			case EStateTreeTransitionTrigger::OnStateSucceeded: TriggerStr = TEXT("OnStateSucceeded"); break;
 			case EStateTreeTransitionTrigger::OnTick: TriggerStr = TEXT("OnTick"); break;
 			case EStateTreeTransitionTrigger::OnEvent: TriggerStr = TEXT("OnEvent"); break;
 			default: TriggerStr = TEXT("Unknown");
 			}
 			TransObj->SetStringField(TEXT("trigger"), TriggerStr);
 
-			// Target state (UE 5.6: FCompactStateTransition::State is FStateTreeStateHandle directly)
+			// Target state
 			if (Transition->State.IsValid())
 			{
 				TransObj->SetNumberField(TEXT("target_state_index"), Transition->State.Index);
@@ -206,21 +212,13 @@ TSharedPtr<FJsonObject> UQueryStateTreeTool::ExtractTransitions(UStateTree* Stat
 			// Priority
 			TransObj->SetNumberField(TEXT("priority"), static_cast<int32>(Transition->Priority));
 
-			// Conditions count (UE 5.6 uses ConditionsNum)
+			// Conditions count
 			if (Transition->ConditionsNum > 0)
 			{
 				TransObj->SetNumberField(TEXT("conditions_count"), Transition->ConditionsNum);
 			}
 
 			TransitionArray.Add(MakeShareable(new FJsonValueObject(TransObj)));
-
-			// Move to next transition - break if we've gone past this state's transitions
-			TransIdx = FStateTreeIndex16(TransIdx.Get() + 1);
-			// Check if still valid
-			if (!StateTree->GetTransitionFromIndex(TransIdx))
-			{
-				break;
-			}
 		}
 	}
 
